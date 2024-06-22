@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Professional Translator</title>
+  <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+  <div class="container">
+    <img class="company-logo" src="SILO.jpg" alt="Company Logo">
+    <h1>Language Translator</h1>
+    <form action="/translate" method="post" id="translateForm">
+      <div class="translator">
+        <div class="language-container">
+          <div class="language-selector">
+            <select name="sourceLanguage" id="sourceLanguage">
+              <option value="en" <%= sourceLang === 'en' ? 'selected' : '' %>>English</option>
+              <option value="es" <%= sourceLang === 'es' ? 'selected' : '' %>>Spanish</option>
+              <option value="fr" <%= sourceLang === 'fr' ? 'selected' : '' %>>French</option>
+              <option value="de" <%= sourceLang === 'de' ? 'selected' : '' %>>German</option>
+              <option value="zh" <%= sourceLang === 'zh' ? 'selected' : '' %>>Chinese</option>
+              <option value="hi" <%= sourceLang === 'hi' ? 'selected' : '' %>>Hindi</option>
+              <option value="ta" <%= sourceLang === 'ta' ? 'selected' : '' %>>Tamil</option>
+              <option value="ja" <%= sourceLang === 'ja' ? 'selected' : '' %>>Japanese</option>
+              <option value="ko" <%= sourceLang === 'ko' ? 'selected' : '' %>>Korean</option>
+              <option value="ru" <%= sourceLang === 'ru' ? 'selected' : '' %>>Russian</option>
+              <option value="ar" <%= sourceLang === 'ar' ? 'selected' : '' %>>Arabic</option>
+            </select>
+            <textarea name="text" class="text1" placeholder="Enter text" required><%= sourceText %></textarea>
+            <button type="button" onclick="speakuserText()">
+                <svg class="speaker-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M8 5v14l11-7z" />
+                    <path d="M0 0h24v24H0z" fill="none" />
+                  </svg>
+            </button>
+          </div>
+          <div class="swap-button" onclick="swapLanguages()">
+            <svg class="swap-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                <path d="M21 10h-4V7c0-1.66-1.34-3-3-3H7C5.34 4 4 5.34 4 7v3H0l7 7 7-7h-4zM3 18h4v3c0 1.66 1.34 3 3 3h7c1.66 0 3-1.34 3-3v-3h4l-7-7-7 7z"/>
+              </svg>
+              
+          </div>
+          <div class="language-selector">
+            <select name="targetLanguage" id="targetLanguage">
+              <option value="en" <%= targetLang === 'en' ? 'selected' : '' %>>English</option>
+              <option value="es" <%= targetLang === 'es' ? 'selected' : '' %>>Spanish</option>
+              <option value="fr" <%= targetLang === 'fr' ? 'selected' : '' %>>French</option>
+              <option value="de" <%= targetLang === 'de' ? 'selected' : '' %>>German</option>
+              <option value="zh" <%= targetLang === 'zh' ? 'selected' : '' %>>Chinese</option>
+              <option value="hi" <%= targetLang === 'hi' ? 'selected' : '' %>>Hindi</option>
+              <option value="ta" <%= targetLang === 'ta' ? 'selected' : '' %>>Tamil</option>
+              <option value="ja" <%= targetLang === 'ja' ? 'selected' : '' %>>Japanese</option>
+              <option value="ko" <%= targetLang === 'ko' ? 'selected' : '' %>>Korean</option>
+              <option value="ru" <%= targetLang === 'ru' ? 'selected' : '' %>>Russian</option>
+              <option value="ar" <%= targetLang === 'ar' ? 'selected' : '' %>>Arabic</option>
+            </select>
+            <textarea readonly class="text1" placeholder="Translation will appear here"><%= translatedText %></textarea>
+            <button type="button" onclick="speakText()">
+                <svg class="speaker-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M8 5v14l11-7z" />
+                    <path d="M0 0h24v24H0z" fill="none" />
+                  </svg>
+            </button>
+          </div>
+        </div>
+        <button type="submit">Translate</button>
+      </div>
+    </form>
+    <% if (error) { %>
+      <div class="error"><%= error %></div>
+    <% } %>
+  </div>
+  <script>
+    function swapLanguages() {
+      const sourceLanguage = document.getElementById('sourceLanguage');
+      const targetLanguage = document.getElementById('targetLanguage');
+      const sourceText = document.querySelector('textarea[name="text"]');
+      const targetText = document.querySelector('textarea[readonly]');
+
+      const tempLang = sourceLanguage.value;
+      sourceLanguage.value = targetLanguage.value;
+      targetLanguage.value = tempLang;
+
+      const tempText = sourceText.value;
+      sourceText.value = targetText.value;
+      targetText.value = tempText;
+    }
+
+    function speakText() {
+      const text = document.querySelector('textarea[readonly]').value;
+      const targetLanguage = document.getElementById('targetLanguage').value;
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = targetLanguage;
+      speechSynthesis.speak(utterance);
+    }
+    function speakuserText() {
+      const text = document.querySelector('textarea[required]').value;
+      const targetLanguage = document.getElementById('sourceLanguage').value;
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = targetLanguage;
+      speechSynthesis.speak(utterance);
+    }
+  </script>
+</body>
+</html>
